@@ -1,18 +1,18 @@
-// swift-tools-version: 6.1
+// swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
+// MODIFIED: Changed mlx-swift-examples to mlx-swift-lm to fix swift-transformers version conflict
 
 import PackageDescription
 
 let package = Package(
     name: "MLXStructured",
-    platforms: [.macOS(.v14), .iOS(.v16)],
+    platforms: [.macOS(.v15), .iOS(.v18)],
     products: [
         .library(name: "MLXStructured", targets: ["MLXStructured"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/ml-explore/mlx-swift", from: "0.25.6"),
-        .package(url: "https://github.com/ml-explore/mlx-swift-examples", from: "2.25.7"),
-        .package(url: "https://github.com/huggingface/swift-transformers", from: "0.1.24"),
+        // Use mlx-swift-lm instead of mlx-swift-examples to avoid swift-transformers conflict
+        .package(url: "https://github.com/ml-explore/mlx-swift-lm", revision: "74f85d9505032ec3403c94ba159472244fe78767"),
         .package(url: "https://github.com/kevinhermawan/swift-json-schema", from: "2.0.1"),
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.4.0"),
     ],
@@ -45,8 +45,7 @@ let package = Package(
             name: "MLXStructured",
             dependencies: [
                 .target(name: "CMLXStructured"),
-                .product(name: "MLX", package: "mlx-swift"),
-                .product(name: "MLXLMCommon", package: "mlx-swift-examples"),
+                .product(name: "MLXLMCommon", package: "mlx-swift-lm"),
                 .product(name: "JSONSchema", package: "swift-json-schema")
             ]
         ),
@@ -55,7 +54,7 @@ let package = Package(
             name: "MLXStructuredCLI",
             dependencies: [
                 .target(name: "MLXStructured"),
-                .product(name: "MLXLLM", package: "mlx-swift-examples"),
+                .product(name: "MLXLLM", package: "mlx-swift-lm"),
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
             ],
         ),
@@ -64,7 +63,7 @@ let package = Package(
             name: "MLXStructuredTests",
             dependencies: [
                 .target(name: "MLXStructured"),
-                .product(name: "MLXLLM", package: "mlx-swift-examples"),
+                .product(name: "MLXLLM", package: "mlx-swift-lm"),
             ],
         ),
     ],
